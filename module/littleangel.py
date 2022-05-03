@@ -17,11 +17,21 @@ from .utils import (
 )
 from typing import Union
 from PIL import Image
+from pydantic import BaseModel
 
 
-async def littleangel(
-    qid: str, text: str = "非常可爱！简直就是小天使", ta: str = "它", name: str = "霖念"
-) -> Union[str, BytesIO]:
+class LittleAngel(BaseModel):
+    qid: str
+    text: str = "非常可爱！简直就是小天使"
+    ta: str = "它"
+    name: str = "Name"
+
+
+async def littleangel(data: LittleAngel) -> Union[str, BytesIO]:
+    qid = data.qid
+    text = data.text
+    ta = data.ta
+    name = data.name
     img = await download_avatar_to_image(qid)
     img = to_jpg(img).convert("RGBA")
     img = limit_size(img, (500, 500), FitSizeMode.INSIDE)

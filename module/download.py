@@ -57,7 +57,7 @@ async def get_font(name: str) -> bytes:
 
 
 @cached(ttl=60)
-async def download_avatar(user_id: str) -> bytes:
+async def download_avatar(user_id: int) -> bytes:
     url = f"http://q1.qlogo.cn/g?b=qq&nk={user_id}&s=640"
     data = await download_url(url)
     if not data or hashlib.md5(data).hexdigest() == "acef72340ac0e914090bd35799f5594e":
@@ -68,5 +68,9 @@ async def download_avatar(user_id: str) -> bytes:
     return data
 
 
-async def download_avatar_to_image(user_id: str):
+async def download_avatar_to_image(user_id: int):
     return Image.open(io.BytesIO(await download_avatar(user_id)))
+
+
+async def download_url_to_image(url: str):
+    return Image.open(io.BytesIO(await download_url(url)))

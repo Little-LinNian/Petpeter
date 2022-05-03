@@ -1,4 +1,4 @@
-from .download import download_avatar_to_image
+from .download import download_avatar_to_image, download_url
 from .utils import (
     circle,
     resize,
@@ -13,8 +13,9 @@ from PIL import Image
 from PIL import ImageFilter
 
 
-async def loading(qid: str, **kwargs) -> BytesIO:
-    img = await download_avatar_to_image(qid)
+async def loading(source_img_url: str, **kwargs) -> BytesIO:
+    img = await download_url(source_img_url)
+    img = Image.open(BytesIO(img))
     bg = await load_image("loading/0.png")
     icon = await load_image("loading/1.png")
     w, h = img.size
